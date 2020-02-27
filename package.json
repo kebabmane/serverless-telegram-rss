@@ -1,0 +1,13 @@
+{
+  "name": "ozbargain-bot",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {
+    "npm-check-updates": "^4.0.2",
+    "serverless": "^1.64.1"
+  },
+  "devDependencies": {
+    "serverless-plugin-tracing": "^2.0.0",
+    "serverless-python-requirements": "^5.1.0"
+  }
+}
