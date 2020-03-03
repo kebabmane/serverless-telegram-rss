@@ -50,5 +50,5 @@ def lambda_handler(event, context):
     for record in event['Records']:
         d = json.loads(record['body'])
         print(d['dynamodb']['Keys']['id']['S'])
-       # bot.send_message(text=record['body']['NewImage']['id']['S'], chat_id=TELEGRAM_CHAT_ID)
+        bot.send_message(text=d['dynamodb']['Keys']['id']['S'], chat_id=TELEGRAM_CHAT_ID)
     print('Successfully processed %s records.' % str(len(event['Records'])))
