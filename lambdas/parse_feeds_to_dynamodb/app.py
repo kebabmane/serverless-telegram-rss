@@ -32,9 +32,9 @@ def lambda_handler(event, context):
             entries_response = entries_table.get_item(
                     Key={'id': entry.link}
              )
-            items = entries_response['Item']
-            if items:
-                 print(items)
+            item = entries_response.get('Item')
+            if item:
+                 print(item)
                  return
             else:
                 entries_table.put_item(

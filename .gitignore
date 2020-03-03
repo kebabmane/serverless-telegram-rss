@@ -18,3 +18,9 @@ var/
 
 # Serverless directories
 .serverless
+
+venv/
+.vscode/
+.ipynb_checkpoints
+.serverless/
+node_modules/
