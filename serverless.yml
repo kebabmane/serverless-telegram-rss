@@ -62,12 +62,12 @@ package:
 
 plugins:
   - serverless-python-requirements
-  - serverless-plugin-tracing  
 
 functions:
   publish_to_telegram:
     handler: app.lambda_handler
     module: lambdas/publish_to_telegram
+    tracing: Active
     events:
       - sqs: 
         arn:
@@ -80,6 +80,7 @@ functions:
   read_dynamo_events:
     handler: app.lambda_handler
     module: lambdas/read_dynamo_events
+    tracing: Active
     events:
       - stream:
          type: dynamodb
@@ -92,9 +93,9 @@ functions:
   crawl:
     handler: app.lambda_handler
     module: lambdas/parse_feeds_to_dynamodb
+    tracing: Active
     events:
-      - schedule: rate(5 minutes)
-      - schedule: cron(0/5 * * * ? *)      
+      - schedule: rate(5 minutes) 
 
 
 resources:
