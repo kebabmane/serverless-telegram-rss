@@ -29,6 +29,7 @@ provider:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
     LAMBDA_QUEUE: ${self:service}-${opt:stage, self:provider.stage}
     TELEGRAM_TOKEN: '716292418:AAFcHLbRTtBk8YnMaKyWL6XekySmUkAYQvE'
+    TELEGRAM_CHAT_ID: '484967493'
   iamRoleStatements:
     - Effect: Allow
       Action:
