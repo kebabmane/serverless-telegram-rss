@@ -27,6 +27,7 @@ provider:
     lambda: true
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    FEEDS_DYNAMODB_TABLE: ${self:service}-feeds-${opt:stage, self:provider.stage}
     LAMBDA_QUEUE: ${self:service}-${opt:stage, self:provider.stage}
     TELEGRAM_TOKEN: '716292418:AAFcHLbRTtBk8YnMaKyWL6XekySmUkAYQvE'
     TELEGRAM_CHAT_ID: '484967493'
@@ -48,6 +49,7 @@ provider:
         - "xray:PutTelemetryRecords"
       Resource: 
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FEEDS_DYNAMODB_TABLE}"
         - "arn:aws:sqs:${opt:region, self:provider.region}:*:${self:provider.environment.LAMBDA_QUEUE}"
         - "*"
 
@@ -87,6 +89,13 @@ functions:
               - StreamArn
         batchSize: 1
 
+  crawl:
+    handler: app.lambda_handler
+    module: lambdas/parse_feeds_to_dynamodb
+    events:
+      - schedule: rate(5 minutes)
+      - schedule: cron(0/5 * * * ? *)      
+
 
 resources:
   Resources:
@@ -112,3 +121,19 @@ resources:
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
+    FeedSourcesTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.FEEDS_DYNAMODB_TABLE}
