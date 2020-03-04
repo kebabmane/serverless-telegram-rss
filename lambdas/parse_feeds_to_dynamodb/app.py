@@ -26,6 +26,7 @@ def lambda_handler(event, context):
     response = feeds_table.scan()
     for item in response['Items']:
         rss_link = item['id']
+        print(rss_link)
         d = feedparser.parse(rss_link)
         for entry in d.entries:
             print(entry.link)
@@ -35,9 +36,7 @@ def lambda_handler(event, context):
             item = entries_response.get('Item')
             if item:
                  print(item)
-                 return
             else:
                 entries_table.put_item(
                        Item={'id': entry.link}
                 )
-                return

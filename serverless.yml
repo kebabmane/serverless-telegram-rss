@@ -25,12 +25,13 @@ provider:
   runtime: python3.8
   tracing:
     lambda: true
+  memorySize: 256   
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
     FEEDS_DYNAMODB_TABLE: ${self:service}-feeds-${opt:stage, self:provider.stage}
     LAMBDA_QUEUE: ${self:service}-${opt:stage, self:provider.stage}
-    TELEGRAM_TOKEN: '716292418:AAFcHLbRTtBk8YnMaKyWL6XekySmUkAYQvE'
-    TELEGRAM_CHAT_ID: '484967493'
+    TELEGRAM_TOKEN: ${env:TELEGRAM_TOKEN}
+    TELEGRAM_CHAT_ID: ${env:TELEGRAM_CHAT_ID}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -62,6 +63,7 @@ package:
 
 plugins:
   - serverless-python-requirements
+  - serverless-dotenv-plugin
 
 functions:
   publish_to_telegram:

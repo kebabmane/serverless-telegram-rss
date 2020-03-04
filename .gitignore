@@ -24,3 +24,5 @@ venv/
 .ipynb_checkpoints
 .serverless/
 node_modules/
+package-lock.json
+.env

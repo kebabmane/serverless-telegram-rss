@@ -3,10 +3,11 @@
   "description": "",
   "version": "0.1.0",
   "dependencies": {
-    "npm-check-updates": "^4.0.2",
-    "serverless": "^1.64.1"
+    "npm-check-updates": "^4.0.3",
+    "serverless": "^1.65.0"
   },
   "devDependencies": {
+    "serverless-dotenv-plugin": "^2.3.2",
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-python-requirements": "^5.1.0"
   }
