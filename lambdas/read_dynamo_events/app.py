@@ -47,3 +47,4 @@ def lambda_handler(event, context):
                 'body': json.dumps(record)
             }
     print('Successfully processed %s records.' % str(len(event['Records'])))
+    return

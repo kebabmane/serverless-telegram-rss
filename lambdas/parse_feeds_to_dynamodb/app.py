@@ -39,4 +39,7 @@ def lambda_handler(event, context):
             else:
                 entries_table.put_item(
                        Item={'id': entry.link}
+    
                 )
+    print('Successfully crawled feeds')
+    return            

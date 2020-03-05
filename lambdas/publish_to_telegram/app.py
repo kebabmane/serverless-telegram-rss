@@ -52,3 +52,4 @@ def lambda_handler(event, context):
         print(d['dynamodb']['Keys']['id']['S'])
         bot.send_message(text=d['dynamodb']['Keys']['id']['S'], chat_id=TELEGRAM_CHAT_ID)
     print('Successfully processed %s records.' % str(len(event['Records'])))
+    return
