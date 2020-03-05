@@ -96,6 +96,7 @@ functions:
     handler: app.lambda_handler
     module: lambdas/parse_feeds_to_dynamodb
     tracing: Active
+    timeout: 30
     events:
       - schedule: rate(5 minutes) 
 
