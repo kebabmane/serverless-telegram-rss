@@ -55,6 +55,9 @@ provider:
         - "*"
 
 custom:
+  wsgi:
+    app: lambdas/api/app.app
+    packRequirements: false
   pythonRequirements:
     dockerizePip: true
 
@@ -64,7 +67,8 @@ package:
 plugins:
   - serverless-python-requirements
   - serverless-dotenv-plugin
-
+  - serverless-wsgi
+  
 functions:
   publish_to_telegram:
     handler: app.lambda_handler
@@ -91,7 +95,12 @@ functions:
               - EventsDynamoDbTable
               - StreamArn
         batchSize: 1
-
+  app:
+    handler: wsgi_handler.handler
+    module: lambdas/api
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'      
   crawl:
     handler: app.lambda_handler
     module: lambdas/parse_feeds_to_dynamodb
