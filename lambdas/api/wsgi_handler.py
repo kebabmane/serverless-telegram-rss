@@ -7,6 +7,7 @@ the request when the handler is called by AWS Lambda.
 Author: Logan Raarup <logan@logan.dk>
 """
 import importlib
+import io
 import json
 import os
 import sys
@@ -23,16 +24,14 @@ import serverless_wsgi
 
 
 def load_config():
-    """ Read the configuration file created during deployment
-    """
+    """Read the configuration file created during deployment"""
     root = os.path.abspath(os.path.dirname(__file__))
     with open(os.path.join(root, ".serverless-wsgi"), "r") as f:
         return json.loads(f.read())
 
 
 def import_app(config):
-    """ Load the application WSGI handler
-    """
+    """Load the application WSGI handler"""
     wsgi_fqn = config["app"].rsplit(".", 1)
     wsgi_fqn_parts = wsgi_fqn[0].rsplit("/", 1)
 
@@ -50,23 +49,20 @@ def import_app(config):
 
 
 def append_text_mime_types(config):
-    """ Append additional text (non-base64) mime types from configuration file
-    """
+    """Append additional text (non-base64) mime types from configuration file"""
     if "text_mime_types" in config and isinstance(config["text_mime_types"], list):
         serverless_wsgi.TEXT_MIME_TYPES.extend(config["text_mime_types"])
 
 
 def handler(event, context):
-    """ Lambda event handler, invokes the WSGI wrapper and handles command invocation
-    """
+    """Lambda event handler, invokes the WSGI wrapper and handles command invocation"""
     if "_serverless-wsgi" in event:
         import shlex
         import subprocess
-        from werkzeug._compat import StringIO, to_native
 
         native_stdout = sys.stdout
         native_stderr = sys.stderr
-        output_buffer = StringIO()
+        output_buffer = io.StringIO()
 
         try:
             sys.stdout = output_buffer
@@ -81,7 +77,7 @@ def handler(event, context):
                 result = subprocess.check_output(
                     meta.get("data", ""), shell=True, stderr=subprocess.STDOUT
                 )
-                output_buffer.write(to_native(result))
+                output_buffer.write(result.decode())
             elif meta.get("command") == "manage":
                 # Run Django management commands
                 from django.core import management
